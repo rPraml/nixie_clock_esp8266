@@ -29,7 +29,7 @@ const int DATA_PIN = 4;
  
 const int NEOPIXEL_PIN = 15;
 
-const int ESP_BUILTIN_LED = 2;
+// const int ESP_BUILTIN_LED = 2; LED and LATCH are the same pins :(
 
 // init the neopixel strip
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(4, NEOPIXEL_PIN, NEO_GRB + NEO_KHZ800);
@@ -147,9 +147,10 @@ public:
     sendBit(0);
     sendDigit(realDigit[1]); // first 74HC595 controls hour digits
     sendDigit(realDigit[0]);
-    digitalWrite(LATCH_PIN, HIGH);
-    delayMicroseconds(45);
+    delayMicroseconds(10);
     digitalWrite(LATCH_PIN, LOW);
+    delayMicroseconds(10);
+    digitalWrite(LATCH_PIN, HIGH);
   }
 };
 
@@ -170,7 +171,7 @@ void setup() {
   pinMode(LATCH_PIN, OUTPUT);
   pinMode(CLOCK_PIN, OUTPUT);
   pinMode(DATA_PIN, OUTPUT);
-  pinMode(ESP_BUILTIN_LED, OUTPUT);
+  //pinMode(ESP_BUILTIN_LED, OUTPUT);
 
   Serial.println("Ready");
   Serial.print("IP address: ");
@@ -193,7 +194,7 @@ void setup() {
   strip.begin();
   strip.setBrightness(255);
   strip.show();
-  digitalWrite(ESP_BUILTIN_LED, HIGH);
+  //pinMode(ESP_BUILTIN_LED, INPUT);
 }
 
 
@@ -263,11 +264,11 @@ void loop() {
       nixie.dot[2] = true;
       nixie.colon = false;
     }
-    switch (second_counter % 26) {
+    switch (second_counter % 14) {
       case 0:
         target_color = BLUE;
         break;
-      case 13:
+      case 7:
         target_color = RED;
         break;
     }
